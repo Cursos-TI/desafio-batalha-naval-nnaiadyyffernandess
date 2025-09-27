@@ -9,6 +9,8 @@ int main()
     // Vetores para os navios (tamanho 3 cada)
     int navioHorizontal[3] = {3,3,3};
     int navioVertical[3] = {3,3,3};
+    int navioDiagonal1[3]  = {3,3,3};
+    int navioDiagonal2[3]  = {3,3,3};
 
       // Posição inicial
     int linhaH = 5, colunaH = 5; // navio horizontal começa em (5,5)
@@ -27,7 +29,17 @@ int main()
         }
     }
 
+ // Colocar navio diagonal 1 (↙️ descendo esquerda: (1,4), (2,3), (3,2))
+    for (int i = 0; i < 3; i++) {
+        tabuleiro[1 + i][4 - i] = navioDiagonal1[i];
+    }
 
+    // Colocar navio diagonal 2 (↘️ descendo direita: (3,7), (4,8), (5,9))
+    for (int i = 0; i < 3; i++) {
+        tabuleiro[3 + i][7 + i] = navioDiagonal2[i];
+    }
+
+    
 //declarando a matriz de tamanho 10x10 (0-9)
 //navio horizontal: linha 5, colunas 5,6,7
 //navio na vertical: coluna9, linhas 7,8,9
