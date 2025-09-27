@@ -3,7 +3,7 @@
 #define H 5 // tamanho das matrizes de habilidade 5x5
 
 // Função para aplicar habilidade no tabuleiro
-void aplicarHabilidade(int tabuleiro[TAM][TAM], int habilidade[H][H], int origemLinha, int origemColuna) {
+void aplicarHabilidade(int tabuleiro[TAM][TAM], int habilidade[H][H], int origemLinha, int origemColuna, int valor) {
     int meio = H / 2;
 
     for (int i = 0; i < H; i++) {
@@ -13,8 +13,8 @@ void aplicarHabilidade(int tabuleiro[TAM][TAM], int habilidade[H][H], int origem
                 int colunaTab = origemColuna + (j - meio);
 
                 if (linhaTab >= 0 && linhaTab < TAM && colunaTab >= 0 && colunaTab < TAM) {
-                    if (tabuleiro[linhaTab][colunaTab] == 0) {
-                        tabuleiro[linhaTab][colunaTab] = 5;
+                    if (tabuleiro[linhaTab][colunaTab] == 0) { // não sobrescreve navio
+                        tabuleiro[linhaTab][colunaTab] = valor;
                     }
                 }
             }
@@ -38,25 +38,25 @@ int main() {
     // Coloca navio horizontal
     if (colunaH + 2 < TAM)
         for (int i = 0; i < 3; i++)
-            tabuleiro[linhaH][colunaH + i] = navioHorizontal[i];
+            tabuleiro[linhaH][colunaH + i] = 'N';
 
     // Coloca navio vertical
     if (linhaV + 2 < TAM)
         for (int i = 0; i < 3; i++)
-            tabuleiro[linhaV + i][colunaV] = navioVertical[i];
+            tabuleiro[linhaV + i][colunaV] = 'N';
 
     // Coloca navio diagonal 1 (↙️)
     for (int i = 0; i < 3; i++)
-        tabuleiro[1 + i][4 - i] = navioDiagonal1[i];
+        tabuleiro[1 + i][4 - i] = 'N';
 
     // Coloca navio diagonal 2 (↘️)
     for (int i = 0; i < 3; i++)
-        tabuleiro[3 + i][7 + i] = navioDiagonal2[i];
+        tabuleiro[3 + i][7 + i] = 'N';
 
     // --- MATRIZES DE HABILIDADES 5x5 ---
     int cone[H][H] = {0};
     int cruz[H][H] = {0};
-    int octaedro[H][H] = {0};
+    int losango[H][H] = {0};
 
     // Preencher cone (triângulo para baixo)
     for (int i = 0; i < H; i++)
@@ -68,18 +68,18 @@ int main() {
         for (int j = 0; j < H; j++)
             if (i == H/2 || j == H/2) cruz[i][j] = 1;
 
-    // Preencher octaedro (losango)
+    // Preencher losango (octaedro)
     for (int i = 0; i < H; i++)
         for (int j = 0; j < H; j++)
-            if (abs(i - H/2) + abs(j - H/2) <= H/2) octaedro[i][j] = 1;
+            if (abs(i - H/2) + abs(j - H/2) <= H/2) losango[i][j] = 1;
 
     // --- APLICAR HABILIDADES ---
-    aplicarHabilidade(tabuleiro, cone, 2, 2);      // cone na posição (2,2)
-    aplicarHabilidade(tabuleiro, cruz, 5, 5);      // cruz na posição (5,5)
-    aplicarHabilidade(tabuleiro, octaedro, 7, 2);  // octaedro na posição (7,2)
+    aplicarHabilidade(tabuleiro, cone, 2, 2, 1);      // cone = 1
+    aplicarHabilidade(tabuleiro, cruz, 5, 5, 2);      // cruz = 2
+    aplicarHabilidade(tabuleiro, losango, 7, 2, 3);   // losango = 3
 
     // --- EXIBIR TABULEIRO ---
-    printf("*** JOGO: BATALHA NAVAL - NIVEL 3 (5x5 HABILIDADES) ***\n");
+    printf("*** JOGO: BATALHA NAVAL - NIVEL 3 (HABILIDADES NUMERADAS) ***\n");
     printf("   ");
     for (int j = 0; j < TAM; j++) printf("%d ", j);
     printf("\n");
@@ -88,8 +88,8 @@ int main() {
         printf("%d  ", i);
         for (int j = 0; j < TAM; j++) {
             if (tabuleiro[i][j] == 0) printf("~ ");   // água
-            else if (tabuleiro[i][j] == 3) printf("N "); // navio
-            else if (tabuleiro[i][j] == 5) printf("* "); // habilidade
+            else if (tabuleiro[i][j] == 'N') printf("N "); // navio
+            else printf("%d ", tabuleiro[i][j]); // habilidades: 1,2,3
         }
         printf("\n");
     }
